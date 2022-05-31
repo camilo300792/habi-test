@@ -13,7 +13,7 @@ Este proyecto lo abordé conociendo de primera mano el modelo de la BD el cuál 
 Para el modelo relacional inicial propongo una mejora y es separar de la tabla property el campo city de forma tal que se convierta en una nueva tabla realcionada para normalizar los datos en la tabla property.
 Para el segundo punto el servicio **Me gusta** propuce una unica tabla relacionada con property y con auth_user que cuenta con una bandera de *me gusta* para que se pueda intercambiar entre me gusta y no me gusta. la tabla almacena el historico de usuario, propiedad y fecha.
 
-![Drag Racing](Dragster.jpg)
+![Habi DB](https://github.com/camilo300792/habi-test/blob/main/habi_db.png)
 
 ## Propuesta de mejora
 
