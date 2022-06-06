@@ -7,11 +7,26 @@ class HabiRepository:
     
     @classmethod
     def getProperty(cls, build_year = None, city = None, status = None):
-        query_property = ("SELECT DISTINCT p.address, p.city, s.name, p.price, p.description "
-                        "FROM property p "
-                        "INNER JOIN status_history sh ON p.id = sh.property_id  "
-                        "INNER JOIN status s ON sh.status_id = s.id "
-                        "WHERE s.id IN (3, 4, 5) ")
+        query_property = (
+            "SELECT DISTINCT "
+            "p.id "
+            ", p.address "
+            ", p.city "
+            ", s.name "
+            ", p.price "
+            ", p.description "
+            "FROM status_history sh "
+            "INNER JOIN ("
+            "    SELECT DISTINCT "
+            "        sh.property_id, "
+            "        MAX(sh.update_date) max_date "
+            "    FROM status_history sh "
+            "    GROUP BY sh.property_id "
+            ") aux ON sh.property_id = aux.property_id AND sh.update_date = max_date "
+            "INNER JOIN property p ON sh.property_id = p.id "
+            "INNER JOIN status s ON sh.status_id = s.id "
+            "WHERE s.id IN (3, 4, 5) "
+        )
         data = []
         if build_year is not None:
             query_property += "AND p.`year` = %s "
@@ -29,7 +44,7 @@ class HabiRepository:
         cursor = cls.__connection.cursor()
         cursor.execute(query_property, params)
         result = []
-        for (address, city, name, price, description) in cursor:
+        for (id, address, city, name, price, description) in cursor:
             result.append({
                 'address': address,
                 'city': city,
